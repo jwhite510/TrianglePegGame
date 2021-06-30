@@ -14,13 +14,27 @@ void printboard(vector<vector<bool>>& board) {
 
 class TeeGame {
   public:
-    TeeGame (vector<vector<bool>>& board) {
-
-      moveslist m = get_moves(board);
-      makemoves(board, m);
-      // cout<<"hello"<<endl;
-
-
+    TeeGame () { }
+    // calculate the number of ways to win
+    int calculate (vector<vector<bool>>& board, int remaining) {
+      if ( remaining == 1 ) {
+        return 1;
+      }
+      int ways = 0;
+      moveslist movesl = get_moves(board);
+      for ( auto move : movesl ) {
+        pair<int, int> start = move.first;
+        pair<int, int> next = move.second;
+        pair<int, int> mid = { (start.first + next.first) / 2, (start.second + next.second) / 2 };
+        board[start.first][start.second] = 0;
+        board[next.first][next.second] = 1;
+        board[mid.first][mid.second] = 0;
+        ways += calculate(board, remaining - 1);
+        board[start.first][start.second] = 1;
+        board[next.first][next.second] = 0;
+        board[mid.first][mid.second] = 1;
+      }
+      return ways;
     }
   private:
     moveslist get_moves(vector<vector<bool>>& board) {
@@ -73,30 +87,19 @@ class TeeGame {
       }
       return moves;
     }
-    void makemoves(vector<vector<bool>>& board, moveslist& movesl) {
-      for ( auto m : movesl ) {
-        // calculate midpoint
-        pair<int, int>mid;
-        mid.first = (m.first.first + m.second.first) / 2;
-        mid.second = (m.first.second + m.second.second) / 2;
-        cout<<"move "<<
-          m.first.first<<" " <<m.first.second<<" -> "
-          <<m.second.first<<" "<<m.second.second
-          <<"  midpoint:"<<mid.first<<" "<<mid.second
-          <<endl;
-
-      }
-
-    }
 };
 
 int main()
 {
   vector<vector<bool>> board {
-         {1},
-       {1, 0},
+         {0},
+       {1, 1},
      {1, 1, 1},
-    {1, 0, 1, 1},
+    {1, 1, 1, 1},
+   {1, 1, 1, 1, 1},
   };
-  TeeGame teegame(board);
+  TeeGame teegame;
+  // 2 + 3 + 4 + 5 = 14
+  int ans = teegame.calculate(board, 14);
+  cout<<"ans: "<<ans<<endl;
 }
