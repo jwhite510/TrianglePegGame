@@ -28,6 +28,7 @@ class TeeGame {
       moveslist moves;
       for ( int i = 0; i < board.size(); i++ ) {
         for ( int j = 0; j < board[i].size(); j++ ) {
+          if ( board[i][j] != 1 ) { continue; }
           // can move up ?
           if ( i - 2 >= 0 ) {
             // up / right
