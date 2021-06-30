@@ -29,6 +29,10 @@ class TeeGame {
     TeeGame () { }
     // calculate the number of ways to win
     int calculate (vector<vector<bool>>& board, int remaining) {
+      if ( mem.find(board) != mem.end() ) {
+        // printboard(board);
+        return mem[board];
+      }
       if ( remaining == 1 ) {
         // printboard(board);
         return 1;
@@ -47,9 +51,11 @@ class TeeGame {
         board[next.first][next.second] = 0;
         board[mid.first][mid.second] = 1;
       }
+      mem[board] = ways;
       return ways;
     }
   private:
+    map<vector<vector<bool>>, int> mem;
     moveslist get_moves(vector<vector<bool>>& board) {
 
       moveslist moves;
