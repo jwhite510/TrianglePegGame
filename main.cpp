@@ -4,12 +4,24 @@
 #include<climits>
 #include<algorithm>
 #include<set>
+#include<fstream>
 using namespace std;
 
 typedef vector<pair<pair<int, int>, pair<int, int>>> moveslist;
 
 void printboard(vector<vector<bool>>& board) {
-
+  ofstream ofile;
+  ofile.open("debug.txt", ios_base::app);
+  ofile<<endl;
+  int sp = 4;
+  for ( int i = 0; i < board.size(); i++ ) {
+    ofile<<string(sp--, ' ');
+    for ( int j = 0; j < board[i].size(); j++ ) {
+      ofile<<board[i][j]<<" ";
+    }
+    ofile<<endl;
+  }
+  ofile.close();
 }
 
 class TeeGame {
@@ -18,6 +30,7 @@ class TeeGame {
     // calculate the number of ways to win
     int calculate (vector<vector<bool>>& board, int remaining) {
       if ( remaining == 1 ) {
+        // printboard(board);
         return 1;
       }
       int ways = 0;
@@ -99,7 +112,7 @@ int main()
    {1, 1, 1, 1, 1},
   };
   TeeGame teegame;
-  // 2 + 3 + 4 + 5 = 14
+  // 2 + 3 + 4 = 9
   int ans = teegame.calculate(board, 14);
   cout<<"ans: "<<ans<<endl;
 }
